@@ -7,7 +7,7 @@ function getAllNIC() {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, conn) => {
             if (err || conn.state === "disconnected") {
-                reject("Server Error");
+                reject("Database Error");
             }
             conn.query("select NIC from User;", function (error, rows, fields) {
                 conn.release();
