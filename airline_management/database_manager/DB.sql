@@ -219,3 +219,12 @@ INSERT INTO route VALUES("02","SAR","CMB","Sarjah to Colombo","3000000");
 INSERT INTO flight_route VALUES("01","02");
 INSERT INTO flight_route VALUES("01","01");
 
+
+
+
+
+
+
+
+select * from Membership;
+

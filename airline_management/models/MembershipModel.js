@@ -5,13 +5,13 @@ var MembershipModel = {
     deleteMembershipType:deleteMembershipType
 }
 
-function addMembershipType() {
+function addMembershipType(array) {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, conn) => {
             if (err || conn.state === "disconnected") {
                 reject("Database Error");
             }
-            conn.query("select NIC from User;", function (error, rows, fields) {
+            conn.query("INSERT INTO membership VALUES(?,?,?);",array, function (error, rows, fields) {
                 conn.release();
                 if (error) {
                     reject(error);
@@ -23,13 +23,13 @@ function addMembershipType() {
     });
 }
 
-function updateMembershipType() {
+function updateMembershipType(array) {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, conn) => {
             if (err || conn.state === "disconnected") {
                 reject("Database Error");
             }
-            conn.query("select NIC from User;", function (error, rows, fields) {
+            conn.query("UPDATE membership set description=?,discount=? where member_type=?",array, function (error, rows, fields) {
                 conn.release();
                 if (error) {
                     reject(error);
@@ -41,13 +41,13 @@ function updateMembershipType() {
     });
 }
 
-function deleteMembershipType() {
+function deleteMembershipType(array) {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, conn) => {
             if (err || conn.state === "disconnected") {
                 reject("Database Error");
             }
-            conn.query("select NIC from User;", function (error, rows, fields) {
+            conn.query("delete from membership where member_type=?",array, function (error, rows, fields) {
                 conn.release();
                 if (error) {
                     reject(error);
