@@ -8,6 +8,7 @@ CREATE TABLE `Admin` (
   `email` VARCHAR(120),
   `password` VARCHAR(45) NOT NULL,
   `NIC` VARCHAR(45) UNIQUE NOT NULL,
+  `country` VARCHAR(10) NOT NULL,
   `age` INT NOT NULL,
   `phone_number` INT,
   `picture` blob default null,
@@ -42,39 +43,37 @@ CREATE TABLE `User` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
     
-CREATE TABLE Plane(
-	p_id int auto_increment,
+CREATE TABLE Plane(	
+	pname VARCHAR(30),
 	capacity int NOT NULL,
 	ptype VARCHAR(20) NOT NULL,
-	pname VARCHAR(30) UNIQUE NOT NULL,
 	engine_no INT UNIQUE NOT NULL,
 	last_repaired DATETIME NOT NULL,
 	color VARCHAR(20) NOT NULL,
     check (capacity>=0),
-	PRIMARY KEY (P_id)
+	PRIMARY KEY (pname)
 );   
 
 CREATE TABLE Airport(
-	a_id INT auto_increment,
+	code CHAR(3),
 	park_capacity INT NOT NULL,
 	latitude numeric(10,5) NOT NULL,
-	longitude numeric(10,5)NOT NULL,
-	code VARCHAR(20) UNIQUE NOT NULL,
+	longitude numeric(10,5)NOT NULL,	
 	description VARCHAR(50) DEFAULT NULL,
     check (park_capacity>=0),
-    PRIMARY KEY (a_id)
+    PRIMARY KEY (code)
 );
   
 CREATE TABLE Route(
 	r_id INT auto_increment,
-	dept_a_id INT NOT NULL,
-	arrive_a_id INT NOT NULL,
+	dept_a_id CHAR(3) NOT NULL,
+	arrive_a_id CHAR(3) NOT NULL,
 	description VARCHAR(50) DEFAULT NULL,
 	length numeric(38,2) NOT NULL,
     check (length>0),
     PRIMARY KEY (r_id),
-	FOREIGN KEY (dept_a_id) REFERENCES Airport (a_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-	FOREIGN KEY (arrive_a_id) REFERENCES Airport (a_id) ON DELETE RESTRICT ON UPDATE CASCADE
+	FOREIGN KEY (dept_a_id) REFERENCES Airport (code) ON DELETE RESTRICT ON UPDATE CASCADE,
+	FOREIGN KEY (arrive_a_id) REFERENCES Airport (code) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 CREATE TABLE Schedule(
 	s_id INT auto_increment,
@@ -85,10 +84,10 @@ CREATE TABLE Schedule(
 );
 CREATE TABLE Flight(
 	f_id INT auto_increment,
-	p_id INT NOT NULL,
+	pname VARCHAR(30),
 	s_id INT NOT NULL,
     PRIMARY KEY (f_id),
-	FOREIGN KEY (p_id) REFERENCES Plane(p_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+	FOREIGN KEY (pname) REFERENCES Plane(pname) ON DELETE RESTRICT ON UPDATE CASCADE,
 	FOREIGN KEY (s_id) REFERENCES Schedule(s_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -100,49 +99,48 @@ CREATE TABLE Flight_Route(
 );
 
 CREATE TABLE Class(
-	class_id SMALLINT auto_increment,
-	description VARCHAR(50) DEFAULT NULL,
-	type VARCHAR(20) UNIQUE NOT NULL,
-	PRIMARY KEY (class_id)
+	type VARCHAR(20),
+	description VARCHAR(50) DEFAULT NULL,	
+	PRIMARY KEY (type)
 );
 
 CREATE TABLE Price(
 	f_id INT NOT NULL,
-	class_id SMALLINT NOT NULL,
+	type VARCHAR(20),
 	amount DECIMAL(10,2) NOT NULL,
     check (amount>=0),
-    FOREIGN KEY (class_id) REFERENCES Class (class_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (type) REFERENCES Class (type) ON DELETE RESTRICT ON UPDATE CASCADE,
 	FOREIGN KEY (f_id) REFERENCES Flight (f_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
 CREATE TABLE Seat(
 	seat_id INT auto_increment,
-	class_id SMALLINT NOT NULL,
-	p_id INT NOT NULL,
+	type VARCHAR(20),
+	pname VARCHAR(30),
 	seat_no INT NOT NULL,
     PRIMARY KEY (seat_id),
-	FOREIGN KEY (class_id) REFERENCES Class (class_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-	FOREIGN KEY (p_id) REFERENCES Plane (p_id) ON DELETE RESTRICT ON UPDATE CASCADE
+	FOREIGN KEY (type) REFERENCES Class (type) ON DELETE RESTRICT ON UPDATE CASCADE,
+	FOREIGN KEY (pname) REFERENCES Plane (pname) ON DELETE RESTRICT ON UPDATE CASCADE
 ); 
 
 CREATE TABLE Book(
 	book_id INT auto_increment,
 	u_id INT NOT NULL,
 	f_id INT NOT NULL,
-	class_id SMALLINT NOT NULL,
+	type VARCHAR(20),
 	time_date DATETIME NOT NULL,
     PRIMARY KEY (book_id),
 	FOREIGN KEY (u_id) REFERENCES User(u_id) ON DELETE RESTRICT ON UPDATE CASCADE,
 	FOREIGN KEY (f_id) REFERENCES Flight(f_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-	FOREIGN KEY (class_id) REFERENCES Class(class_id) ON DELETE RESTRICT ON UPDATE CASCADE	
+	FOREIGN KEY (type) REFERENCES Class(type) ON DELETE RESTRICT ON UPDATE CASCADE	
 );
 
 --  ============================== INDEX ==============================
 create index ADMIN_SELECT on Admin(NIC);
 create index USER_SELECT on User(NIC);
 create index PLANE_SELECT on Plane(pname);
-create index AIRPORT_SELECT on Airport(a_id);
+create index AIRPORT_SELECT on Airport(code);
 
 
 show tables;
@@ -162,12 +160,12 @@ desc user;
 
 --  ============================== DUMMY DATA FOR START	 ==============================
 -- admin:
-INSERT INTO admin VALUES ("01","Rashmi","rashmi.18@cse.mrt.ac.lk","rashmi","995030225V","22","0702036662",null);
-INSERT INTO admin VALUES ("02","Sandali","sandali.18@cse.mrt.ac.lk","sandali","985030225V","23","0702036663",null);
+INSERT INTO admin VALUES ("01","Rashmi","rashmi.18@cse.mrt.ac.lk","rashmi","995030225V","Sri Lanka","22","0702036662",null);
+INSERT INTO admin VALUES ("02","Sandali","sandali.18@cse.mrt.ac.lk","sandali","985030225V","Canada","23","0702036663",null);
 
 -- plane:
-INSERT INTO plane VALUES("01","180","A320","A320-200","2","2020-11-30","White");
-INSERT INTO plane VALUES("02","145","A319","A319-200","3","2020-02-22","White");
+INSERT INTO plane VALUES("A320-200","180","A320","2","2020-11-30","White");
+INSERT INTO plane VALUES("A319-200","145","A319","3","2020-02-22","White");
 -- membership:
 INSERT INTO membership VALUES("Guest","Guest customer","0");
 INSERT INTO membership VALUES("Reg_frequent","Registered and frequent customer","5");
@@ -190,32 +188,32 @@ INSERT INTO schedule VALUES("01",NULL,"2020-10-09 05:30:00","2020-10-09 08:30:00
 INSERT INTO schedule VALUES("03",NULL,"2020-10-09 05:30:00","2020-10-09 08:30:00");
 
 -- class:
-INSERT INTO class VALUES("01",null,"1st class");
-INSERT INTO class VALUES("02",null,"2nd class");
+INSERT INTO class VALUES("Economic","Normal Travels");
+INSERT INTO class VALUES("Bussiness","Business Matters");
 
 -- flight:
-INSERT INTO flight VALUES("01","01","01");
-INSERT INTO flight VALUES("02","02","01");
+INSERT INTO flight VALUES("01","A320-200","01");
+INSERT INTO flight VALUES("02","A319-200","01");
 
 -- book:
-INSERT INTO book VALUES("01","03","01","01","2020-10-09 05:30:00");
-INSERT INTO book VALUES("02","06","02","02","2020-12-23 05:30:00");
+INSERT INTO book VALUES("01","03","01","Economic","2020-10-09 05:30:00");
+INSERT INTO book VALUES("02","06","02","Bussiness","2020-12-23 05:30:00");
 
 -- seat:
-INSERT INTO seat VALUES("01","01","02","34");
-INSERT INTO seat VALUES("02","02","01","155");
+INSERT INTO seat VALUES("01","Economic","A320-200","34");
+INSERT INTO seat VALUES("02","Bussiness","A320-200","155");
 
 -- price:
-INSERT INTO price VALUES("01","01","30000");
-INSERT INTO price VALUES("02","01","60000");
+INSERT INTO price VALUES("01","Economic","30000");
+INSERT INTO price VALUES("02","Bussiness","60000");
 
 -- airport:
-INSERT INTO airport VALUES("01","10000","500","10000","100",null);
-INSERT INTO airport VALUES("02","30000","200","10000","57",null);
+INSERT INTO airport VALUES("CMB","10000","500","10000",null);
+INSERT INTO airport VALUES("SAR","30000","200","10000",null);
 
 -- route:
-INSERT INTO route VALUES("01","02","01",NULL,"100000");
-INSERT INTO route VALUES("02","01","02",NULL,"3000000");
+INSERT INTO route VALUES("01","CMB","SAR","Colombo to Sarjah","100000");
+INSERT INTO route VALUES("02","SAR","CMB","Sarjah to Colombo","3000000");
 
 -- flight_route:
 INSERT INTO flight_route VALUES("01","02");
