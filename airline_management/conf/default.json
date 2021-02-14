@@ -1,8 +1,7 @@
 {
     "Database":{
-        "host":"localhost",
+        "host":"localhost:3306",
         "user":"root",
-        "password":"1234",
         "database":"A12_AirLine_Management"        
     },
     "App":{
