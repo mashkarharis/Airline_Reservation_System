@@ -1,0 +1,42 @@
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>My Bookings <b>Details</b></h2></div>
+                   
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Flight ID</th>
+                        <th>Seat ID</th>
+                        <th>Time Booked</th>
+                        <th>Class</th>
+                        <th>Plane Name</th>
+                        <th>Seat No.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <% data.forEach(function(book) { %>
+                        <% var link="/member/removebook/?booking_id="+book.book_id %>
+                        <tr>
+                            <td><%= book.book_id %></td>
+                            <td><%= book.f_id %></td>
+                            <td><%= book.seat_id %></td>
+                            <td><%= book.time_date %></td>
+                            <td><%= book.type %></td>
+                            <td><%= book.pname %></td>
+                            <td><%= book.seat_no %></td>
+                            <td><a class="delete" href= <%=link%> title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+                        </tr>
+                        <% }); %>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>     

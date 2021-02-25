@@ -1,0 +1,5 @@
+atomic
+same domain
+no partial dependancy
+no transitive dependancy
+for each functional dependancy x should be a super key

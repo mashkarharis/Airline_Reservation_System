@@ -1,0 +1,37 @@
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Plane <b>Details</b></h2></div>
+                   
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Capacity</th>
+                        <th>Type</th>
+                        <th>Engine No</th>
+                        <th>Last Repaired</th>
+                        <th>Color</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.forEach(function(plane) { %>
+                        <tr>
+                            <td><%= plane.pname %></td>
+                            <td><%= plane.capacity %></td>
+                            <td><%= plane.ptype %></td>
+                            <td><%= plane.engine_no %></td>
+                            <td><%= plane.last_repaired %></td>
+                            <td><%= plane.color %></td>
+                        </tr>
+                        <% }); %>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>     
