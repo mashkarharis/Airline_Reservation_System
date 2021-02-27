@@ -1,0 +1,48 @@
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Member Details</b></h2></div>
+                   
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Member Type</th>
+                        <th>Country</th>
+                        <th>Password</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>NIC</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Picture</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <% data.forEach(function(member) { %>
+                        <% var link="/member/removemember/?email="+member.email %>
+                        <tr>
+                            <td><%= member.email %></td>
+                            <td><%= member.country %></td>
+                            <td><%= member.NIC %></td>
+                            <td><%= member.member_type %></td>
+                            <td><%= member.name %></td>
+                            <td><%= member.age %></td>
+                            <td><%= member.address %></td>
+                            <td><%= member.phone_number %></td>
+                            <td><%= member.picture %></td>
+                            <td><a class="delete" href= <%=link%> title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+                        </tr>
+                        <% }); %>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>     

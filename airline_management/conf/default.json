@@ -2,10 +2,10 @@
     "Database":{
         "host":"localhost",
         "user":"root",
-        "password":"1234",
+        "password":"Sandu1117@Karu",
         "database":"A12_AirLine_Management"        
     },
     "App":{
-        "port":3002
+        "port":3306
     }
 }

@@ -4,7 +4,8 @@ var UserModel = {
     get_user_data: get_user_data,
     register_user: register_user,
     get_user_data_by_email: get_user_data_by_email,
-    update_user:update_user
+    update_user:update_user,
+    delete_user:delete_user
 }
 
 function getAllNIC() {
@@ -127,4 +128,23 @@ function register_user(data, privilege) {
         })
     });
 }
+
+function delete_user(u_id) {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, conn) => {
+            if (err || conn.state === "disconnected") {
+                reject("Database Error");
+            }
+            conn.query("delete from user where u_id=?",[u_id], function (error, rows, fields) {
+                conn.release();
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(rows[0]);
+                }
+            });            
+        })
+    });
+}
+
 module.exports = UserModel;

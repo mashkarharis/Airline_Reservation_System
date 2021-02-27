@@ -1,0 +1,46 @@
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Admin Details</h2></div>
+                   
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Admin ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>NIC</th>
+                        <th>Country</th>
+                        <th>Age</th>
+                        <th>Phone Number</th>
+                        <th>Picture</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <% data.forEach(function(admin) { %>
+                        <% var link="/admin/removeadmin/?email="+admin.email %>
+                        <% var link="/admin/addadmin/?email="+admin.email %>
+                        <tr>
+                            <td><%= admin.email %></td>
+                            <td><%= admin.country %></td>
+                            <td><%= admin.NIC %></td>
+                            <td><%= admin.name %></td>
+                            <td><%= admin.age %></td>
+                            <td><%= admin.address %></td>
+                            <td><%= admin.phone_number %></td>
+                            <td><%= admin.picture %></td>
+                            <td><a class="delete" href= <%=link%> title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+                        </tr>
+                        <% }); %>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>     

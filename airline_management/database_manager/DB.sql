@@ -180,6 +180,7 @@ show tables;
 create VIEW all_member_public_data as select email,privilege,country,NIC,member_type,name,age,address,phone_number,picture  from User natural join Member;
 create VIEW all_admin_public_data as select email,privilege,country,NIC,name,age,address,phone_number,picture  from User natural join Admin;
 create VIEW basic_book_data as Select email,book_id,f_id,time_date,type,pname,seat_id,seat_no from Book left join Seat using(seat_id);
+create View revenue_plane as select pname, sum(amount) from price innner join flight using(f_id) group by pname;
 -- =================================== Procedures ================================================
 -- ======== To get data of login person ==========
 drop procedure if exists get_user_data;
@@ -219,6 +220,25 @@ create procedure removebooking(IN in_book_id INT)
         update Member set member_type=new_member_type where email=dec_email;
 	end; //
 delimiter ;
+
+-- ======== To View Flights, Passenger Count ==========
+drop procedure if exists ;
+delimiter //
+create procedure flight_details(IN in_dept_a_id VARCHAR(20),IN in_arrive_a_id VARCHAR(20))
+	begin
+		DECLARE plane_name VARCHAR(50);
+        DECLARE num_of_passengers INT;
+
+		select pname into plane_name from flight inner join route using(r_id) where dept_a_id=in_dept_a_id and arrive_a_id=in_arrive_a_id;
+        
+        
+        select count(NIC) into num_of_passengers from guest inner join book where guest.book_id=book.book_id in(select book_id from book inner join flight where book.f_id=flight.f_id in (select f_id from flight inner join route using(r_id) where dept_a_id=in_dept_a_id and arrive_a_id=in_arrive_a_id));
+        
+	end; //
+delimiter ;
+
+
+
 
 -- ==================== Triggers ===========================
 -- =========== Seat Not Exceed Plane Capacity ==============
