@@ -180,6 +180,16 @@ show tables;
 create VIEW all_member_public_data as select email,privilege,country,NIC,member_type,name,age,address,phone_number,picture  from User natural join Member;
 create VIEW all_admin_public_data as select email,privilege,country,NIC,name,age,address,phone_number,picture  from User natural join Admin;
 create VIEW basic_book_data as Select email,book_id,f_id,time_date,type,pname,seat_id,seat_no from Book left join Seat using(seat_id);
+drop  view if exists Flight_Plane;
+create view Flight_Plane as select f_id,pname,s_id,r_id from Flight natural join Plane;
+-- select * from Flight_Plane;
+
+drop view if exists Flight_Schedule;
+create view Flight_Schedule as select f_id,pname,r_id,arrival_time,departure_time from Flight_Plane natural join Schedule;
+-- select * from Flight_Schedule;
+drop view if exists Flight_Data;
+create view Flight_Data as select * from Flight_Schedule left join Route using(r_id);
+select * from Flight_Data;
 -- =================================== Procedures ================================================
 -- ======== To get data of login person ==========
 drop procedure if exists get_user_data;
