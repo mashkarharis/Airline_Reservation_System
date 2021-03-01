@@ -143,6 +143,7 @@ CREATE TABLE Book(
 	f_id INT NOT NULL,
 	seat_id INT NOT NULL,
 	time_date DATETIME NOT NULL,
+    paid DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (book_id),
     UNIQUE KEY(f_id,seat_id),
     FOREIGN KEY(email) REFERENCES Member(email) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -179,7 +180,7 @@ show tables;
 -- =================================== View ======================================================
 create VIEW all_member_public_data as select email,privilege,country,NIC,member_type,name,age,address,phone_number,picture  from User natural join Member;
 create VIEW all_admin_public_data as select email,privilege,country,NIC,name,age,address,phone_number,picture  from User natural join Admin;
-create VIEW basic_book_data as Select email,book_id,f_id,time_date,type,pname,seat_id,seat_no from Book left join Seat using(seat_id);
+create VIEW basic_book_data as Select email,book_id,f_id,time_date,type,pname,seat_id,seat_no,paid from Book left join Seat using(seat_id);
 drop  view if exists Flight_Plane;
 create view Flight_Plane as select f_id,pname,s_id,r_id from Flight natural join Plane;
 -- select * from Flight_Plane;
@@ -187,9 +188,29 @@ create view Flight_Plane as select f_id,pname,s_id,r_id from Flight natural join
 drop view if exists Flight_Schedule;
 create view Flight_Schedule as select f_id,pname,r_id,arrival_time,departure_time from Flight_Plane natural join Schedule;
 -- select * from Flight_Schedule;
+
+drop view if exists Flight_Schedule_Price;
+create view Flight_Schedule_Price as select * from Flight_Schedule left join Price using(f_id);
+
+
 drop view if exists Flight_Data;
-create view Flight_Data as select * from Flight_Schedule left join Route using(r_id);
+create view Flight_Data as select * from Flight_Schedule_Price left join Route using(r_id);
 select * from Flight_Data;
+-- =================================== Functions ================================================
+drop function if exists `not_departured`;
+DELIMITER //
+CREATE FUNCTION `not_departured`(f_id_in INT) 
+RETURNS varchar(20)
+deterministic
+BEGIN
+	DECLARE departure_at varchar(20);
+    DECLARE ret_val boolean;
+	select departure_time into departure_at from Flight_Data where f_id=f_id_in limit 1;
+	RETURN(current_timestamp()<departure_at);
+END; //
+delimiter ;
+select distinct f_id from Flight where not_departured(f_id) order by (f_id);
+select not_departured(1);
 -- =================================== Procedures ================================================
 -- ======== To get data of login person ==========
 drop procedure if exists get_user_data;
@@ -298,12 +319,12 @@ insert into Route(dept_a_id,arrive_a_id,description,length) values("CMD","SAR","
 insert into Route(dept_a_id,arrive_a_id,description,length) values("HAM","SAR","Hambantota to Sarjah",112000);
 
 insert into Schedule(description,arrival_time,departure_time) values ("Morning Flight","2021-02-12 08:15:00","2021-02-12 18:15:00");
-insert into Schedule(description,arrival_time,departure_time) values ("Evening Flight","2021-02-12 13:15:00","2021-02-12 21:15:00");
-insert into Schedule(description,arrival_time,departure_time) values ("Night Flight","2021-02-12 18:15:00","2021-02-13 01:15:00");
+insert into Schedule(description,arrival_time,departure_time) values ("Evening Flight","2021-03-12 13:15:00","2021-03-12 21:15:00");
+insert into Schedule(description,arrival_time,departure_time) values ("Night Flight","2021-04-12 18:15:00","2021-04-13 01:15:00");
 
 insert into Flight(pname,s_id,r_id) values("A-2123",1,3);
 insert into Flight(pname,s_id,r_id) values("A-2123",3,2);
-insert into Flight(pname,s_id,r_id) values("B-2132",1,1);
+insert into Flight(pname,s_id,r_id) values("B-2132",2,1);
 
 insert into Price values(1,"Economy",130000);
 insert into Price values(1,"Bussiness",230000);
@@ -314,10 +335,10 @@ insert into Price values(2,"Bussiness",220000);
 insert into Price values(3,"Economy",80000);
 insert into Price values(3,"Bussiness",100000);
 
-insert into Book(email,f_id,seat_id,time_date) values ("davidjones@gmail.com",1,2,"2021-02-15 10:30:00");
-insert into Book(email,f_id,seat_id,time_date) values ("kamalperera@gmail.com",2,1,"2021-02-10 12:30:00");
-insert into Book(email,f_id,seat_id,time_date) values ("davidjones@gmail.com",3,2,"2021-02-15 10:30:00");
-insert into Book(email,f_id,seat_id,time_date) values ("davidjones@gmail.com",2,1,"2021-02-10 12:30:00");
+insert into Book(email,f_id,seat_id,time_date,paid) values ("davidjones@gmail.com",1,2,"2021-02-15 10:30:00",10000.00);
+insert into Book(email,f_id,seat_id,time_date,paid) values ("kamalperera@gmail.com",2,1,"2021-02-10 12:30:00",20000.00);
+insert into Book(email,f_id,seat_id,time_date,paid) values ("davidjones@gmail.com",3,2,"2021-02-15 10:30:00",30000.00);
+insert into Book(email,f_id,seat_id,time_date,paid) values ("davidjones@gmail.com",2,1,"2021-02-10 12:30:00",40000.00);
 
 -- Guest + Book
 
@@ -327,5 +348,5 @@ select * from Admin;
 select * from Airport;
 select * from Schedule;
 Select email,book_id,f_id,time_date,type,pname,seat_id,seat_no from Book left join Seat using(seat_id);
-
+select distinct f_id from Flight;
 -- Select (book_id,f_id,time_date,type,pname,seat_id,seat_no) from Book left join Seat using(seat_id);

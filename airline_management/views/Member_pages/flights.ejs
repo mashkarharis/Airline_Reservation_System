@@ -15,24 +15,45 @@
                         <th>Arrival Time</th>
                         <th>To</th>
                         <th>Plane</th>
-                        <th>Price</th>
-                        <th>Description</th>
+                         <th>Description</th>
                         <th>Length</th>
+                        <th>Class</th>
+                        <th>Price</th>
+                       
 
                     </tr>
                 </thead> 
                 <tbody>
+                    <% var initial_id=null;%>
                     <% data.forEach(function(flight) { %>
                         <tr>
+                            <% if(flight.f_id==initial_id){%>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><%= flight.type %></td>
+                            <td><%= flight.amount %></td>
+                            <%}else{%>
+                                <%initial_id=flight.f_id;%>
                             <td><%= flight.f_id %></td>
                             <td><%= flight.departure_time %></td>
                             <td><%= flight.dept_a_id %></td>
                             <td><%= flight.arrival_time %></td>
                             <td><%= flight.arrive_a_id %></td>
                             <td><%= flight.pname %></td>
-                            <td><%= flight.pname %></td>
                             <td><%= flight.description %></td>
                             <td><%= flight.length %></td>
+                            <td><%= flight.type %></td>
+                            <td><%= flight.amount %></td>
+
+                            <%}%>
+
+                            
                         </tr>
                         <% }); %>
                    

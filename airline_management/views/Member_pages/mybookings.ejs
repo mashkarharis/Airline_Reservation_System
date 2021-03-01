@@ -17,6 +17,7 @@
                         <th>Class</th>
                         <th>Plane Name</th>
                         <th>Seat No.</th>
+                        <th>Paid</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,6 +32,7 @@
                             <td><%= book.type %></td>
                             <td><%= book.pname %></td>
                             <td><%= book.seat_no %></td>
+                            <td><%= book.paid %></td>
                             <td><a class="delete" href= <%=link%> title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
                         </tr>
                         <% }); %>

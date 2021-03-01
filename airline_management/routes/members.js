@@ -91,12 +91,31 @@ router.get("/showflights", function (req, res, next) {
     res.forEach(row => {
       array.push(row);
     });
+    
     console.log(array);    
   }).catch((err)=>{
   }).finally(()=>{
     console.log(array);
     console.log("Flight Data Released");
     res.render("Member_pages/flights", { title: "Member", layout : "layouts/member_layout", data: array });}
+  );
+});
+
+
+router.get("/showflightsguest", function (req, res, next) {
+  //if(req.session.data==null){res.redirect('/');}
+  array=[]
+  PlaneModel.getFlightData().then((res)=>{   
+    res.forEach(row => {
+      array.push(row);
+    });
+    
+    console.log(array);    
+  }).catch((err)=>{
+  }).finally(()=>{
+    console.log(array);
+    console.log("Flight Data Released");
+    res.render("Member_pages/flights", { title: "Guest",  data: array });}
   );
 });
 
