@@ -29,6 +29,38 @@ router.get("/iwantbook", function (req, res, next) {
    });  
 });
 
+router.get("/flightclass", function (req, res, next) {
+  var id=req.param('id')
+  console.log(req.params);
+  var array=[]
+  PlaneModel.getFlightClasses(id).then((res)=>{   
+    res.forEach(row => {
+      array.push(row.type);
+    });
+    console.log("----------------------------")
+    console.log(array); 
+    res.send(array);  
+  }).catch((err)=>{
+    res.send(array);
+  }); 
+});
+
+router.get("/flightseat/:id/:class", function (req, res, next) {
+  var id=req.params.id;
+  var classed=req.params.class;
+  console.log(req.params);
+  var array=[]
+  PlaneModel.getFlightSeats(id,classed).then((res)=>{   
+    res.forEach(row => {
+      array.push(row.seat_no);
+    });
+    console.log("----------------------------")
+    console.log(array); 
+    res.send(array);  
+  }).catch((err)=>{
+    res.send(array);
+  }); 
+});
 
 router.get("/login", function (req, res, next) {
   if(req.session.data!=null){res.redirect('/');}

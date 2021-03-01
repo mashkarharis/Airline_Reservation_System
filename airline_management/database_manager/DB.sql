@@ -350,3 +350,7 @@ select * from Schedule;
 Select email,book_id,f_id,time_date,type,pname,seat_id,seat_no from Book left join Seat using(seat_id);
 select distinct f_id from Flight;
 -- Select (book_id,f_id,time_date,type,pname,seat_id,seat_no) from Book left join Seat using(seat_id);
+
+
+select pname from Flight where f_id=1;
+select * from Seat where pname in (select pname from Flight where f_id=1);

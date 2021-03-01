@@ -3,7 +3,9 @@ var PlaneModel = {
     getPlaneData:getPlaneData,
     getAirportData:getAirportData,
     getFlightData:getFlightData,
-    getFlightID:getFlightID
+    getFlightID:getFlightID,
+    getFlightClasses:getFlightClasses,
+    getFlightSeats:getFlightSeats
 }
 
 function getPlaneData(){
@@ -13,6 +15,44 @@ function getPlaneData(){
                 reject("Database Error");
             }
             conn.query("select * from Plane;", function (error, rows, fields) {
+                conn.release();
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(rows);
+                }
+            });            
+        })
+    });
+}
+
+function getFlightClasses(id){
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, conn) => {
+            if (err || conn.state === "disconnected") {
+                reject("Database Error");
+            }
+            //console.log(id);
+            conn.query("select type from Flight_Data where f_id=?;",[id], function (error, rows, fields) {
+                conn.release();
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(rows);
+                }
+            });            
+        })
+    });
+}
+
+function getFlightSeats(id,classed){
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, conn) => {
+            if (err || conn.state === "disconnected") {
+                reject("Database Error");
+            }
+            //console.log(id);
+            conn.query("select * from Seat where pname in (select pname from Flight where f_id=?) and type=? and seat_id not in (select seat_id from Book where f_id=?);",[id,classed,id], function (error, rows, fields) {
                 conn.release();
                 if (error) {
                     reject(error);
