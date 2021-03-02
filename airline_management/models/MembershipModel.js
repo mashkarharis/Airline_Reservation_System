@@ -41,7 +41,7 @@ function updateMembershipType(array) {
     });
 }
 
-function deleteMembershipType(array) {
+function deleteMembershipType(member_type) {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, conn) => {
             if (err || conn.state === "disconnected") {
