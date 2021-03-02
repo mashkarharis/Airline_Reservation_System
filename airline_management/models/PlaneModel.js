@@ -6,7 +6,8 @@ var PlaneModel = {
     getFlightID:getFlightID,
     getFlightClasses:getFlightClasses,
     getFlightSeats:getFlightSeats,
-    getFlightPrice:getFlightPrice
+    getFlightPrice:getFlightPrice,
+    getdiscount:getdiscount
 }
 
 function getPlaneData(){
@@ -16,6 +17,24 @@ function getPlaneData(){
                 reject("Database Error");
             }
             conn.query("select * from Plane;", function (error, rows, fields) {
+                conn.release();
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(rows);
+                }
+            });            
+        })
+    });
+}
+
+function getdiscount(mem){
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, conn) => {
+            if (err || conn.state === "disconnected") {
+                reject("Database Error");
+            }
+            conn.query("select discount from Membership where member_type=?",[mem], function (error, rows, fields) {
                 conn.release();
                 if (error) {
                     reject(error);

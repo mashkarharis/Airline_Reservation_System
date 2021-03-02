@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Training Application Form</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+		integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+
+
+	<style>
+		html,
+		body {
+			min-height: 100%;
+		}
+
+		body,
+		div,
+		form,
+		input,
+		select,
+		p {
+			padding: 0;
+			margin: 0;
+			outline: none;
+			font-family: Roboto, Arial, sans-serif;
+			font-size: 14px;
+			color: #666;
+			line-height: 22px;
+		}
+
+		h1 {
+			position: absolute;
+			margin: 0;
+			font-size: 32px;
+			color: #fff;
+			z-index: 2;
+		}
+
+		h2 {
+			font-weight: 400;
+		}
+
+		.testbox {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: inherit;
+			padding: 20px;
+		}
+
+		form {
+			width: 100%;
+			padding: 20px;
+			border-radius: 6px;
+			background: #fff;
+			box-shadow: 0 0 20px 0 #095484;
+		}
+
+		.banner {
+			position: relative;
+			height: 210px;
+			background-image: url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1353&q=80");
+			background-size: cover;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+		}
+
+		.banner::after {
+			content: "";
+			background-color: rgba(0, 0, 0, 0.4);
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
+
+		input,
+		select {
+			margin-bottom: 10px;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+		}
+
+		input {
+			width: calc(100% - 10px);
+			padding: 5px;
+		}
+
+		select {
+			width: 100%;
+			padding: 7px 0;
+			background: transparent;
+		}
+
+		.item:hover p,
+		.item:hover i,
+		.question:hover p,
+		.question label:hover,
+		input:hover::placeholder,
+		a {
+			color: #095484;
+		}
+
+		.item input:hover,
+		.item select:hover {
+			border: 1px solid transparent;
+			box-shadow: 0 0 6px 0 #095484;
+			color: #095484;
+		}
+
+		.item {
+			position: relative;
+			margin: 10px 0;
+		}
+
+		input[type="date"]::-webkit-inner-spin-button {
+			display: none;
+		}
+
+		.item i,
+		input[type="date"]::-webkit-calendar-picker-indicator {
+			position: absolute;
+			font-size: 20px;
+			color: #a9a9a9;
+		}
+
+		.item i {
+			right: 2%;
+			top: 30px;
+			z-index: 1;
+		}
+
+		[type="date"]::-webkit-calendar-picker-indicator {
+			right: 1%;
+			z-index: 2;
+			opacity: 0;
+			cursor: pointer;
+		}
+
+		input[type=checkbox] {
+			display: none;
+		}
+
+		label.check {
+			position: relative;
+			display: inline-block;
+			margin: 5px 20px 10px 0;
+			cursor: pointer;
+		}
+
+		.question span {
+			margin-left: 30px;
+		}
+
+		span.required {
+			margin-left: 0;
+			color: red;
+		}
+
+		label.check:before {
+			content: "";
+			position: absolute;
+			top: 2px;
+			left: 0;
+			width: 16px;
+			height: 16px;
+			border-radius: 2px;
+			border: 1px solid #095484;
+		}
+
+		input[type=checkbox]:checked+.check:before {
+			background: #095484;
+		}
+
+		label.check:after {
+			content: "";
+			position: absolute;
+			top: 6px;
+			left: 4px;
+			width: 8px;
+			height: 4px;
+			border: 3px solid #fff;
+			border-top: none;
+			border-right: none;
+			transform: rotate(-45deg);
+			opacity: 0;
+		}
+
+		input[type=checkbox]:checked+label:after {
+			opacity: 1;
+		}
+
+		.btn-block {
+			margin-top: 10px;
+			text-align: center;
+		}
+
+		button {
+			width: 150px;
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			background: #095484;
+			font-size: 16px;
+			color: #fff;
+			cursor: pointer;
+		}
+
+		button:hover {
+			background: #0666a3;
+		}
+
+		@media (min-width: 568px) {
+
+			.name-item,
+			.city-item {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+			}
+
+			.name-item input,
+			.city-item input {
+				width: calc(50% - 20px);
+			}
+
+			.city-item select {
+				width: calc(50% - 8px);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div
+		style="background-color: white; border: 2px solid blue; margin: 4px; padding: 2px; font-weight: bold; text-align: center;">
+		<h2 style="color:black;">
+			<%=msg%>
+		</h2>
+	</div>
+	<a href="/member/">Back</a>
+	<div class="testbox">
+
+
+		<form action="/member/membook" method="POST">
+			<div class="banner">
+				<h1>Online Flight Booking Form</h1>
+			</div>
+			<h2>Your Details</h2>
+			<div class="item">
+				<p>Name</p>
+				<input type="text" name="name" required readonly value="<%- data.data[0].name %>" />
+			</div>
+
+			<div class="item">
+				<p>Email</p>
+				<input type="text" name="email" required readonly value="<%- data.data[0].email %>" />
+			</div>
+
+
+			<div class="item">
+				<p>NIC</p>
+				<input type="text" name="NIC" readonly value="<%- data.data[0].NIC %>" />
+			</div>
+			<div>
+				<select style="width: 100%;" id="country" name="country">
+					<option value="<%- data.data[0].country %>">
+						<%- data.data[0].country %>
+					</option>
+				</select>
+
+				<label class="description" for="Age">Age </label>
+				<div>
+					<input style="width: 100%;" id="age" name="age" type="number" min="18" required readonly
+						value="<%- data.data[0].age %>" />
+				</div>
+
+				<label class="description" for="address">Address </label>
+				<div>
+					<textarea style="width: 100%;" id="address" type="text" name="address" required
+						readonly><%- data.data[0].address %></textarea>
+				</div>
+
+				<label class="description" for="phone">Phone </label>
+				<div>
+					+<input style="width: 100%;" id="phone" name="phone" type="number" required readonly
+						value="<%- data.data[0].phone_number %>" />
+				</div>
+
+
+
+				<div>
+					<hr style="height:10px;border:none;color:#100;background-color:#313;" />
+				</div>
+
+
+
+				<h2>Flight Details</h2>
+				<p>Flight ID</p>
+				<div class="item">
+
+					<select style="width: 100%;" id="flight" name="flight">
+						<option value='-'>-</option>
+						<% flights.forEach(function(flight) { %>
+							<%if(flight.f_id!=''){%>
+								<option value=<%=flight.f_id %>><%= flight.f_id %>
+										<%}%>
+								</option>
+								<%});%>
+					</select>
+				</div>
+
+
+
+
+				<div id='class_div' class="item" hidden>
+					<p>Class</p>
+					<select style="width: 100%;" id="class_select" name="class">
+
+					</select>
+				</div>
+
+				<div id="seat_div" class="seat_div" hidden>
+					<p>Seat ID</p>
+					<select style="width: 100%;" id="seat_id" name="seat_id">
+
+					</select>
+				</div>
+
+				<p id="info">
+				<p>
+
+				<div id="detail_div" class="detail_div" hidden>
+					<p>You Have To Pay</p>
+					<input type="text" id="detail" name="topay" readonly></input>
+				</div>
+				<div id="book_id_div" class="book_id" hidden>
+					<p>Book ID (Please Note Down This)</p>
+					<input type="text" id="book_id" name="book_id" readonly></input>
+				</div>
+
+
+				<div id="submit_div" class="btn-block" hidden>
+					<button type="submit">Book</button>
+				</div>
+		</form>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script>
+		$("#flight").change(function () {
+			$('#class_select').children().remove();
+			$('#class_div').hide();
+			$('#seat_div').hide();
+			$('#detail_div').hide();
+			$('#submit_div').hide();
+			$('#book_id_div').hide();
+			$('#info').html('');
+
+
+			var flightid = $(this).val();
+			if (flightid == '-') {
+				console.log("----")
+			}
+			else {
+
+				var url = "/flightclass?id=" + flightid;
+				console.log(url);
+				$.ajax({
+					type: 'GET',
+					url: "/flightclass?id=" + flightid,
+					jsonpCallback: 'testing',
+					success: function (json) {
+						console.log(json);
+						$('#class_select').append('<option value="-">-</option>');
+
+						json.forEach(element => {
+							var newOption = $('<option value="' + element + '">' + element + '</option>');
+							$('#class_select').append(newOption);
+						});
+
+						$('#class_div').show();
+
+
+					},
+					error: function (e) {
+						alert(e.message);
+					}
+				});
+
+				console.log(flightid);
+			}
+		});
+
+
+
+
+
+
+		$("#class_select").change(function () {
+			$('#seat_id').children().remove();
+			$('#seat_div').hide();
+			$('#detail_div').hide();
+			$('#submit_div').hide();
+			$('#book_id_div').hide();
+			$('#info').html('');
+			var classed = $(this).val();
+			if (classed == '-') {
+				console.log("--C-")
+			}
+			else {
+				var flightid = $('#flight').val();
+
+
+				var url = "/flightseat/" + flightid + '/' + classed;
+				console.log(url);
+				$.ajax({
+					type: 'GET',
+					url: url,
+					jsonpCallback: 'testing',
+					success: function (json) {
+						console.log(json);
+						$('#seat_id').append('<option value="-">-</option>');
+
+						json.forEach(element => {
+							var newOption = $('<option value="' + element + '">' + element + '</option>');
+							$('#seat_id').append(newOption);
+						});
+
+						$('#seat_div').show();
+
+					},
+					error: function (e) {
+						alert(e.message);
+					}
+				});
+
+				console.log(classed);
+			}
+		});
+
+
+
+
+		$("#seat_id").change(function () {
+			$('#detail').attr('value', '-')
+			$('#detail_div').hide();
+			$('#submit_div').hide();
+			$('#book_id_div').hide();
+			$('#info').html('');
+			var seat_no = $(this).val();
+			if (seat_no == '-') {
+				console.log("--C-")
+			}
+			else {
+
+
+				var flightid = $('#flight').val();
+				var classed = $('#class_select').val();
+
+				var discount = 0;
+				$.ajax({
+					type: 'GET',
+					url: '/discount/<%= data.data[0].member_type %>',
+					jsonpCallback: 'testing',
+					success: function (json) {
+						console.log('Discount');
+						console.log(json);
+						discount=json[0].discount;
+					},
+					error: function (e) {
+						alert(e.message);
+					}
+				});
+
+				var url = "/flight_price/" + flightid + '/' + classed;
+				console.log(url);
+				$.ajax({
+					type: 'GET',
+					url: url,
+					jsonpCallback: 'testing',
+					success: function (json) {
+						var memtype =
+							console.log(json);
+						$('#detail').attr('value', parseFloat(json[0])*(100-parseFloat(discount))/100.00);
+						$('#detail_div').show();
+						$('#info').html('>--------------------------***--------------------------<<br>How Calculated?<br>==============<br>Amount :' + json[0] + '<br> Membership Type : <%= data.data[0].member_type %> <br>Discount : '+discount+'%<br>>--------------------------***--------------------------<')
+
+
+						var price = $('#detail').val();
+						if (parseFloat(price) > 0) {
+							console.log("Will Show")
+							$('#submit_div').show();
+							console.log(parseInt(Date.now()) * 100 + parseInt(flightid) * 10 + parseInt($('#seat_id').val()));
+							var val = parseInt(Date.now()) * 100 + parseInt(flightid) * 10 + parseInt($('#seat_id').val());
+							$('#book_id').attr('value', val);
+							$('#book_id_div').show();
+
+						}
+					},
+					error: function (e) {
+						alert(e.message);
+					}
+				});
+
+				console.log(classed);
+			}
+		});
+
+
+
+
+
+	</script>
+
+
+
+</body>
+
+</html>

@@ -3,7 +3,8 @@ var BookModel = {
     getBookdata:getBookdata,
     remove_booking:remove_booking,
     doguestbooking:doguestbooking,
-    getguestData:getguestData
+    getguestData:getguestData,
+    domembooking:domembooking
 }
 function doguestbooking(body) {
     return new Promise((resolve, reject) => {
@@ -57,7 +58,26 @@ function doguestbooking(body) {
 
 
 
-
+function domembooking(body){
+    console.log("ABC");
+    console.log(body.email);
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, conn) => {
+            if (err || conn.state === "disconnected") {
+                reject("Database Error");
+            }
+            conn.query('INSERT INTO Book values(?,?,?,?,?,?)', [body.book_id,body.email,body.flight,body.seat_id,new Date(),body.topay], function (error, rows, fields) {
+                conn.release();
+                if (error) {
+                    console.log(error);
+                    reject(error);
+                } else {
+                    resolve(rows);
+                }
+            });            
+        })
+    });
+}
 
 
 
@@ -93,6 +113,7 @@ function remove_booking(booking_id){
             conn.query("call removebooking(?)",[booking_id], function (error, rows, fields) {
                 conn.release();
                 if (error) {
+                    console.log(error);
                     reject(error);
                 } else {
                     resolve(rows);

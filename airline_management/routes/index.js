@@ -152,6 +152,24 @@ router.post("/guestbook", function (req, res, next) {
 });
 
 
+router.get("/discount/:mem", function (req, res, next) {
+  var mem=req.params.mem;
+
+  array=[];
+  PlaneModel.getdiscount(mem).then((res)=>{   
+    res.forEach(row => {
+      array.push(row);
+    });
+    console.log("----------------------------")
+    console.log(array);    
+  }).catch((err)=>{
+  }).finally(()=>{
+    res.send(array);
+   });  
+});
+
+
+
 
 
 

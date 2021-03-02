@@ -232,7 +232,7 @@ call get_user_data("davidjones@gmail.com","32250170a0dca92d53ec9624f336ca24");
 -- ======== To Update Member Type After Booking Removed ==========
 drop procedure if exists removebooking;
 delimiter //
-create procedure removebooking(IN in_book_id INT)
+create procedure removebooking(IN in_book_id BIGINT)
 	begin
 		DECLARE dec_email VARCHAR(120);
         DECLARE num_of_bookings INT;
@@ -278,7 +278,7 @@ DELIMITER ;
 
 -- ============================= SAMPLE DATA ===========================
 
-insert into Membership values("New","New Member",0,0);
+insert into Membership values("New","New Member",1,0);
 insert into Membership values("Frequent","Usually do travels",5,3);
 insert into Membership values("Gold","Always do travels",9,5);
 
