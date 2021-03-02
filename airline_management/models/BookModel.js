@@ -1,8 +1,66 @@
 const { pool } = require('../database_manager/mysqlpool');
 var BookModel = {
     getBookdata:getBookdata,
-    remove_booking:remove_booking
+    remove_booking:remove_booking,
+    doguestbooking:doguestbooking
 }
+function doguestbooking(body) {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, conn) => {
+            if (err || conn.state === "disconnected") {
+                reject("Database Error");
+            }
+            conn.beginTransaction(function (err) {
+                if (err) { reject(err); }
+                conn.query('INSERT INTO Book values(?,?,?,?,?,?)', [body.book_id,null,body.flight,body.seat_id,new Date(),body.topay], function (err, result) {
+                    if (err) {
+                        conn.rollback(function () {
+                            reject(err);
+                        });
+                    }
+                    else {
+                        console.log("First Success");
+                        conn.query('INSERT INTO Guest values(?,?,?,?,?,?,?,?)', [body.book_id,body.country,body.NIC,body.name,body.age,body.address,body.phone,null], function (err, result) {
+                            if (err) {
+                                conn.rollback(function () {
+                                    reject(err);
+                                });
+                            }
+                            else {
+                                console.log("Second Success");
+                                conn.commit(function (err) {
+                                    if (err) {
+                                        conn.rollback(function () {
+                                            reject(err)
+                                        });
+                                    }
+                                    console.log('Transaction Complete.');
+                                    conn.end();
+                                    resolve("Success");
+                                });
+                            }
+                        })
+                    }
+                });
+            });
+        })
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function getBookdata(email){
     console.log("ABC");

@@ -1,4 +1,5 @@
 var express = require("express");
+const BookModel = require("../models/BookModel");
 var router = express.Router();
 const PlaneModel = require("../models/PlaneModel");
 
@@ -12,7 +13,9 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/iwantbook", function (req, res, next) {
-  array=[]
+  array=[];
+  var msgs=req.session.msg;
+  req.session.msg=null;
   PlaneModel.getFlightID().then((res)=>{   
     res.forEach(row => {
       array.push(row);
@@ -24,7 +27,8 @@ router.get("/iwantbook", function (req, res, next) {
     res.render("iwantbook.ejs", {
       title: "Express",
       layout: false,
-      flights: array
+      flights: array,
+      msg:msgs
     });
    });  
 });
@@ -62,6 +66,25 @@ router.get("/flightseat/:id/:class", function (req, res, next) {
   }); 
 });
 
+router.get("/flight_price/:id/:class", function (req, res, next) {
+  var id=req.params.id;
+  var classed=req.params.class;
+  console.log(req.params);
+  var array=[]
+  
+  PlaneModel.getFlightPrice(id,classed).then((res)=>{   
+    res.forEach(row => {
+      array.push(row.amount);
+    });
+    console.log("----------------------------")
+    console.log(array); 
+    res.send(array);  
+  }).catch((err)=>{
+    res.send(array);
+  }); 
+});
+
+
 router.get("/login", function (req, res, next) {
   if(req.session.data!=null){res.redirect('/');}
   var msgs=req.session.msg;
@@ -83,6 +106,35 @@ router.get("/register", function (req, res, next) {
     msg:msgs
   });
 });
+
+
+
+
+
+router.post("/guestbook", function (req, res, next) {
+  var body=req.body;
+  console.log(body);
+  BookModel.doguestbooking(body).then((result) => {
+    req.session.data = null;
+    req.session.msg = "Booking Success.Your Booking ID is :"+body.book_id;
+    res.redirect('/iwantbook');
+    res.end();
+  }).catch((err) => {
+    console.log(err)
+    req.session.data = null;
+    req.session.msg = "Booking Failed"
+    res.redirect('/iwantbook');
+    res.end();
+  });
+});
+
+
+
+
+
+
+
+
 // router.get("/", function (req, res, next) {
 //   res.render("landingPage/index.ejs", {
 //     title: "Express",

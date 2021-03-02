@@ -138,7 +138,7 @@ CREATE TABLE Seat(
 ); 
 
 CREATE TABLE Book(
-	book_id INT auto_increment,
+	book_id bigint,
 	email VARCHAR(120) default NULL,
 	f_id INT NOT NULL,
 	seat_id INT NOT NULL,
@@ -152,7 +152,7 @@ CREATE TABLE Book(
 );
 
 CREATE TABLE `Guest` (	
-  `book_id` INT NOT NULL,
+  `book_id` bigint,
   `country` VARCHAR(10) NOT NULL,
   `NIC` VARCHAR(45) default NULL,
   `name` VARCHAR(45) NOT NULL,
@@ -335,10 +335,13 @@ insert into Price values(2,"Bussiness",220000);
 insert into Price values(3,"Economy",80000);
 insert into Price values(3,"Bussiness",100000);
 
-insert into Book(email,f_id,seat_id,time_date,paid) values ("davidjones@gmail.com",1,2,"2021-02-15 10:30:00",10000.00);
-insert into Book(email,f_id,seat_id,time_date,paid) values ("kamalperera@gmail.com",2,1,"2021-02-10 12:30:00",20000.00);
-insert into Book(email,f_id,seat_id,time_date,paid) values ("davidjones@gmail.com",3,2,"2021-02-15 10:30:00",30000.00);
-insert into Book(email,f_id,seat_id,time_date,paid) values ("davidjones@gmail.com",2,1,"2021-02-10 12:30:00",40000.00);
+insert into Book(book_id,email,f_id,seat_id,time_date,paid) values (UNIX_TIMESTAMP()*100+1*10+2,"davidjones@gmail.com",1,2,"2021-02-15 10:30:00",10000.00);
+select * from Book;
+insert into Book(book_id,email,f_id,seat_id,time_date,paid) values (UNIX_TIMESTAMP()*100+2*10+1,"kamalperera@gmail.com",2,1,"2021-02-10 12:30:00",20000.00);
+select * from Book;
+insert into Book(book_id,email,f_id,seat_id,time_date,paid) values (UNIX_TIMESTAMP()*100+3*10+2,"davidjones@gmail.com",3,2,"2021-02-15 10:30:00",30000.00);
+select * from Book;
+insert into Book(book_id,email,f_id,seat_id,time_date,paid) values (UNIX_TIMESTAMP()*100+2*10+1,"davidjones@gmail.com",2,1,"2021-02-10 12:30:00",40000.00);
 
 -- Guest + Book
 
@@ -351,6 +354,8 @@ Select email,book_id,f_id,time_date,type,pname,seat_id,seat_no from Book left jo
 select distinct f_id from Flight;
 -- Select (book_id,f_id,time_date,type,pname,seat_id,seat_no) from Book left join Seat using(seat_id);
 
-
+select * from Book;
+select * from Seat;
 select pname from Flight where f_id=1;
-select * from Seat where pname in (select pname from Flight where f_id=1);
+select * from Price where f_id=1 and type="Economy" limit 1;
+select * from Seat where pname in (select pname from Flight where f_id=1) and type="Economy" and seat_id not in (select seat_id from Book where f_id=1);

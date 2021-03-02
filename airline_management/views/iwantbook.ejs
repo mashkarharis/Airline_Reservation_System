@@ -236,7 +236,10 @@
 
 <body>
 	<div class="testbox">
-		<form action="/">
+		<div style="background-color: white; border: 2px solid blue; margin: 4px; padding: 2px; font-weight: bold; text-align: center;">
+			<h2 style="color:black;"><%=msg%></h2>
+		</div>
+		<form action="/guestbook" method="POST">
 			<div class="banner">
 				<h1>Online Flight Booking Form</h1>
 			</div>
@@ -248,7 +251,7 @@
 
 			<div class="item">
 				<p>Email</p>
-				<input type="text" name="name" required />
+				<input type="text" name="email" required />
 			</div>
 
 
@@ -558,12 +561,20 @@
 					</select>
 				</div>
 
-				<div class="detail_div" hidden>
-					<p>Details</p>
-					<textbox type="text" id="detail" name="details" readonly>ASD</textbox>
+				<p id="info"><p>
+
+				<div id="detail_div"class="detail_div" hidden>
+					<p>You Have To Pay</p>
+					<input type="text" id="detail" name="topay" readonly></input>
 				</div>
-				<div class="btn-block">
-					<button type="submit" href="/" hidden>Book</button>
+				<div id="book_id_div"class="book_id" hidden>
+					<p>Book ID (Please Note Down This)</p>
+					<input type="text" id="book_id" name="book_id" readonly></input>
+				</div>
+
+
+				<div  id="submit_div" class="btn-block" hidden>
+					<button type="submit">Book</button>
 				</div>
 		</form>
 	</div>
@@ -574,6 +585,9 @@
 			$('#class_div').hide();
 			$('#seat_div').hide();
 			$('#detail_div').hide();
+			$('#submit_div').hide();
+			$('#book_id_div').hide();
+			$('#info').html('');
 
 
 			var flightid = $(this).val();
@@ -596,13 +610,15 @@
  							$('#class_select').append(newOption);
 						});
 
+						$('#class_div').show();
+
 						
 					},
 					error: function (e) {
 						alert(e.message);
 					}
 				});
-				$('#class_div').show();
+				
 				console.log(flightid);
 			}
 		});
@@ -616,8 +632,9 @@
 			$('#seat_id').children().remove();
 			$('#seat_div').hide();
 			$('#detail_div').hide();
-
-
+			$('#submit_div').hide();
+			$('#book_id_div').hide();
+			$('#info').html('');
 			var classed = $(this).val();
 			if (classed == '-') {
 				console.log("--C-")
@@ -640,14 +657,15 @@
 							var newOption = $('<option value="'+element+'">'+element+'</option>');
  							$('#seat_id').append(newOption);
 						});
-
+						
+						$('#seat_div').show();
 						
 					},
 					error: function (e) {
 						alert(e.message);
 					}
 				});
-				$('#seat_div').show();
+				
 				console.log(classed);
 			}
 		});
@@ -656,9 +674,11 @@
 
 
 		$("#seat_id").change(function () {
+			$('#detail').attr('value', '-')
 			$('#detail_div').hide();
-
-
+			$('#submit_div').hide();
+			$('#book_id_div').hide();
+			$('#info').html('');
 			var seat_no = $(this).val();
 			if (seat_no == '-') {
 				console.log("--C-")
@@ -677,24 +697,34 @@
 					jsonpCallback: 'testing',
 					success: function (json) {
 						console.log(json);
-						$('#seat_id').append('<option value="-">-</option>');
+						$('#detail').attr('value', json[0]);
+						$('#detail_div').show();
+						$('#info').html('>--------------------------***--------------------------<<br>How Calculated?<br>==============<br>Amount :'+json[0]+'<br> Membership Type : Guest <br>Discount : 0.00%<br>>--------------------------***--------------------------<')
+					
 						
-						json.forEach(element => {
-							var newOption = $('<option value="'+element+'">'+element+'</option>');
- 							$('#seat_id').append(newOption);
-						});
+						var price = $('#detail').val();
+						if (parseFloat(price)>0) {
+							console.log("Will Show")
+							$('#submit_div').show();
+							console.log(parseInt(Date.now())*100+parseInt(flightid)*10+parseInt($('#seat_id').val()));
+							var val=parseInt(Date.now())*100+parseInt(flightid)*10+parseInt($('#seat_id').val());
+							$('#book_id').attr('value',val);
+							$('#book_id_div').show();
 
-						
+						}
 					},
 					error: function (e) {
 						alert(e.message);
 					}
 				});
-				$('#seat_div').show();
+				
 				console.log(classed);
 			}
 		});
 
+
+
+		
 
 	</script>
 
