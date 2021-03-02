@@ -23,13 +23,13 @@ function addClassType(array) {
     });
 }
 
-function updateClassType(array) {
+function updateClassType(data) {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, conn) => {
             if (err || conn.state === "disconnected") {
                 reject("Database Error");
             }
-            conn.query("UPDATE class set description=? where type=?",array, function (error, rows, fields) {
+            conn.query("UPDATE class set description=? where type=?",data, function (error, rows, fields) {
                 conn.release();
                 if (error) {
                     reject(error);
@@ -41,13 +41,13 @@ function updateClassType(array) {
     });
 }
 
-function deleteClassType(array) {
+function deleteClassType(class_id) {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, conn) => {
             if (err || conn.state === "disconnected") {
                 reject("Database Error");
             }
-            conn.query("delete from class where type=?",array, function (error, rows, fields) {
+            conn.query("delete from class where type=?",[class_id], function (error, rows, fields) {
                 conn.release();
                 if (error) {
                     reject(error);
