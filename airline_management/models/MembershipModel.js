@@ -47,7 +47,7 @@ function deleteMembershipType(member_type) {
             if (err || conn.state === "disconnected") {
                 reject("Database Error");
             }
-            conn.query("delete from membership where member_type=?",array, function (error, rows, fields) {
+            conn.query("delete from membership where member_type=?",member_type, function (error, rows, fields) {
                 conn.release();
                 if (error) {
                     reject(error);
