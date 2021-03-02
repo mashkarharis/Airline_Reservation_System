@@ -1,4 +1,7 @@
 var express = require("express");
+const AirportModel = require("../models/AirportModel");
+const RouteModel = require("../models/RouteModel");
+const ScheduleModel = require("../models/ScheduleModel");
 var router = express.Router();
 
 /* GET home page. */
