@@ -11,6 +11,12 @@ router.get("/", function (req, res, next) {
     data: req.session.data
   });
 });
+router.get("/guestshowbook", function (req, res, next) {
+  res.render("showmebookings.ejs", {
+    title: "Guest",
+    layout: false,
+  });
+});
 
 router.get("/iwantbook", function (req, res, next) {
   array=[];
@@ -56,7 +62,7 @@ router.get("/flightseat/:id/:class", function (req, res, next) {
   var array=[]
   PlaneModel.getFlightSeats(id,classed).then((res)=>{   
     res.forEach(row => {
-      array.push(row.seat_no);
+      array.push(row.seat_id);
     });
     console.log("----------------------------")
     console.log(array); 
@@ -65,6 +71,23 @@ router.get("/flightseat/:id/:class", function (req, res, next) {
     res.send(array);
   }); 
 });
+
+router.get("/getguestbookingdata/:bid", function (req, res, next) {
+  var id=req.params.bid;
+  console.log(req.params);
+  var array=[]
+  BookModel.getguestData(id).then((res)=>{   
+    res.forEach(row => {
+      array.push(row);
+    });
+    console.log("----------------------------")
+    console.log(array); 
+    res.send(array);  
+  }).catch((err)=>{
+    res.send(array);
+  });  
+}); 
+
 
 router.get("/flight_price/:id/:class", function (req, res, next) {
   var id=req.params.id;

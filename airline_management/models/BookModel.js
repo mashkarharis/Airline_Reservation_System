@@ -2,7 +2,8 @@ const { pool } = require('../database_manager/mysqlpool');
 var BookModel = {
     getBookdata:getBookdata,
     remove_booking:remove_booking,
-    doguestbooking:doguestbooking
+    doguestbooking:doguestbooking,
+    getguestData:getguestData
 }
 function doguestbooking(body) {
     return new Promise((resolve, reject) => {
@@ -100,8 +101,25 @@ function remove_booking(booking_id){
         })
     });
 }
+function getguestData(bid){
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, conn) => {
+            if (err || conn.state === "disconnected") {
+                reject("Database Error");
+            } 
+            conn.query("select * from Book natural join Guest where book_id=?",[bid], function (error, rows, fields) {
+                conn.release();
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(rows);
+                }
+            });            
+        })
+    });
+}
 
 
-
-
+ 
 module.exports=BookModel;

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h2>Show Me Bookings</h2>
+
+
+    <label for="fname">Book ID:</label>
+    <input type="text" id="book_id" name="book_id" value="">
+    <button id="button">Check</button>
+    <label for="fname">Details :</label>
+    <textarea type="text" id="details" name="details" value="" readonly></textarea>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script>
+        $("#button").click(function () {
+            var book_id = $('#book_id').val();
+            var url = "/getguestbookingdata/" + book_id;
+            console.log(url);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                jsonpCallback: 'testing',
+                success: function (json) {
+                    console.log(json);
+                    $("#details").val(JSON.stringify(json[0]));
+                },
+                error: function (e) {
+                    console.log(e);
+                    $("#details").attr('value', alert(e.message));
+                }
+            });
+        });
+    </script>
+
+
+
+
+
+</body >
+</html >

@@ -73,7 +73,7 @@ function getFlightSeats(id,classed){
                 reject("Database Error");
             }
             //console.log(id);
-            conn.query("select * from Seat where pname in (select pname from Flight where f_id=?) and type=? and seat_no not in (select seat_id from Book where f_id=?);",[id,classed,id], function (error, rows, fields) {
+            conn.query("select * from Seat where pname in (select pname from Flight where f_id=?) and type=? and seat_id not in (select seat_id from Book where f_id=?);",[id,classed,id], function (error, rows, fields) {
                 conn.release();
                 if (error) {
                     reject(error);
